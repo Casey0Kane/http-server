@@ -8,12 +8,12 @@ import server
 
 
 """msg longer than serveral buffers in length:.
-    ssert msg sent = reply recieved """
+    assert msg sent = reply recieved """
 
 
 """msg exact multiple of one buffer in length:.
-    ssert msg sent = reply recieved """
+    assert msg sent = reply recieved """
 
 
 """msg cont non-ascii chars:.
-    ssert msg sent = reply recieved"""
+    assert msg sent = reply recieved"""
