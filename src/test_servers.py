@@ -1,18 +1,20 @@
 """Testing our functions."""
-import client
-import server
+from client import client
 
 
-"""msg shorter than buffer in length:.
-    assert msg sent = reply recieved """
+def test_message_less_than_buffer():
+    """Test message is smaller than the buffer."""
+    assert client("message") == "message"
 
 
-"""msg longer than serveral buffers in length:.
-    assert msg sent = reply recieved """
+def test_message_larger_than_buffer():
+    """Test message is smaller than a buffer."""
+    assert client("Message is super long and won't be shorter than 8") == "Message is super long and won't be shorter than 8"
 
 
-"""msg exact multiple of one buffer in length:.
-    assert msg sent = reply recieved """
+def test_message_same_as_buffer():
+    """Test message is same as the buffer."""
+    assert client("MsgEIGHT") == "MsgEIGHT"
 
 
 """msg cont non-ascii chars:.
