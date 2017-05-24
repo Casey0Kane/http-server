@@ -5,7 +5,8 @@ import sys
 
 def server():
     """Our server function for our sockets."""
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
+    server = socket.socket(
+        socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
     address = ('127.0.0.1', 5001)
     server.bind(address)
     server.listen(1)
@@ -24,13 +25,11 @@ def server():
             print('Connection succesfull!')
             conn.close()
         except KeyboardInterrupt:
+            print("\nClosing echo server.")
             break
         except(RuntimeError, SyntaxError, UnicodeError):
             conn.sendall(response_error().encode('utf8'))
             print("How did you manage to mess up this badly?")
-        finally:
-            if conn:
-                conn.close()
     server.close()
     sys.exit()
 

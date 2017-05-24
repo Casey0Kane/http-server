@@ -17,4 +17,10 @@ setup(
     package_dir={'': 'src'},
     install_requires=["ipython", "pytest"],
     extras_require=extra_packages,
+    entry_points={
+        'console_scripts': [
+            'client = client:client',
+            'server = server:server'
+        ]
+    }
 )
