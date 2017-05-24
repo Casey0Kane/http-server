@@ -20,14 +20,37 @@ def server():
                 msg += part
                 if len(part) < buffer_length:
                     break
-
-            conn.sendall(msg)
+            conn.sendall(response_ok().encode('utf8'))
+            print('Connection succesfull!')
             conn.close()
-
         except KeyboardInterrupt:
-            server.close()
-            print("Shutting down echo server. Bye, bye!")
-            sys.exit()
+            break
+        except(RuntimeError, SyntaxError, UnicodeError):
+            conn.sendall(response_error().encode('utf8'))
+            print("How did you manage to mess up this badly?")
+        finally:
+            if conn:
+                conn.close()
+    server.close()
+    sys.exit()
+
+
+def response_ok():
+    """Send a 200 response."""
+    return """
+    HTTP/1.1 200 OK\r\n
+    Content-Type: text/plain \r\n
+    \r\n
+    Successfully connected."""
+
+
+def response_error():
+    """Send a 500 Server Error."""
+    return """
+    HTTP/1.1 500 Internal Server Error\r\n
+    Content-Type: text/plain\r\n
+    \r\n
+    Could not Successfully connect."""
 
 
 if __name__ == '__main__':
