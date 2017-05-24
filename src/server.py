@@ -52,6 +52,11 @@ def response_error():
     Could not Successfully connect."""
 
 
+def parse_request():
+    """Check request and send to either response_ok or response_error."""
+    pass
+
+
 if __name__ == '__main__':
     print("Echo server is running\n")
     server()
