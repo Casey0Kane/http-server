@@ -3,6 +3,9 @@ import socket
 import sys
 
 
+CRLF = b" \r\n\r\n"
+
+
 def server():
     """Our server function for our sockets."""
     server = socket.socket(
@@ -43,18 +46,27 @@ def response_ok():
     Successfully connected."""
 
 
-def response_error():
+def response_error(self, error_code, reason_phrase):
     """Send a 500 Server Error."""
-    return """
-    HTTP/1.1 500 Internal Server Error\r\n
-    Content-Type: text/plain\r\n
-    \r\n
+    error_code = 'HTTP/1.1 500 Internal Server Error<CRLF>'
+    reason_phrase = """Content-Type: text/plain<CRLF>
+    <CRLF>
     Could not Successfully connect."""
+    error_msg = error_code + reason_phrase
+    return error_msg
 
 
-def parse_request():
+def parse_request(request):
     """Check request and send to either response_ok or response_error."""
-    pass
+    request = 'GET /path/to/index.html HTTP/1.1<CRLF>'
+    'Host:  www.example.com:80<CRLF>'
+    '<CRLF>'
+    if request == response_ok():
+        return response_ok()
+        print(response_ok)
+    else:
+        return response_error(request)
+        print(response_error)
 
 
 if __name__ == '__main__':
