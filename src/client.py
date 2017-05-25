@@ -5,7 +5,7 @@ import sys
 
 def client(message):
     """Our client function for our sockets."""
-    infos = socket.getaddrinfo('127.0.0.1', 5001)
+    infos = socket.getaddrinfo('127.0.0.1', 5000)
     stream_infos = [i for i in infos if i[1] == socket.SOCK_STREAM][0]
     client = socket.socket(*stream_infos[:3])
     client.connect(stream_infos[-1])

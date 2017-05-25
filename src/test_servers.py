@@ -3,14 +3,14 @@ import pytest
 
 HTTP_TABLE = [
     ['GET /path/to/index.html HTTP/1.1',
-        "HTTP/1.1 200 OK\r\nContent-Type: text/plain \r\n\r\Successfully connected."],
+        "HTTP/1.1 200 OK\r\nContent-Type: text/plain \r\n\r\n Successfully connected.\r\n\r\n"],
     ['GET /to/index.html HTTP/1.1',
-        "HTTP/1.1 200 OK\r\nContent-Type: text/plain \r\n\r\nSuccesfully connected."],
+        """HTTP/1.1 200 OK\r\nContent-Type: text/plain \r\n\r\n Successfully connected.\r\n\r\n"""],
     ['GET index.html HTTP/1.1',
-        "HTTP/1.1 200 OK\r\nContent-Type: text/plain \r\n\r\nSuccesfully connected."],
+        """HTTP/1.1 200 OK\r\nContent-Type: text/plain \r\n\r\n Successfully connected.\r\n\r\n"""],
     # fails because of PUT instead of GET
     ['PUT /path/to/index.html HTTP/1.1',
-        'HTTP/1.1 500 Internal Server Error\r\nThis server only accepts GET requests\r\n\r\n'],
+        'HTTP/1.1 500 Internal Server Error\r\nThis server only accepts GET requests \r\n\r\n'],
     # fails because HTTP is wrong version
     ['GET /path/to/index.html HTTP/1.0',
         'HTTP/1.1 500 Internal Server Error\r\nClient must use HTTP/1.1\r\n\r\n'],

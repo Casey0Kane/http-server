@@ -10,7 +10,7 @@ def server():
     """Our server function for our sockets."""
     server = socket.socket(
         socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
-    address = ('127.0.0.1', 5001)
+    address = ('127.0.0.1', 5000)
     server.bind(address)
     server.listen(1)
     while True:
@@ -28,7 +28,7 @@ def server():
             if msg[-3:] == 'EOF':
                 msg = msg[:-3]
             print(msg.decode('utf8'))
-            response = parse_request(msg)
+            response = parse_request(msg.decode('utf8'))
             conn.sendall(response.encode('utf8'))
         except KeyboardInterrupt:
             print("\nClosing HTTP server.")
@@ -43,11 +43,7 @@ def server():
 
 def response_ok():
     """Send a 200 response."""
-    return """
-    HTTP/1.1 200 OK\r\n
-    Content-Type: text/plain \r\n
-    \r\n
-    Successfully connected.<CRLF>"""
+    return """HTTP/1.1 200 OK\r\nContent-Type: text/plain \r\n\r\n Successfully connected.\r\n\r\n"""
 
 
 def response_error(error):
