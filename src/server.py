@@ -1,9 +1,7 @@
 """This is our server file."""
 import socket
 import sys
-
-
-CRLF = b" \r\n\r\n"
+import os
 
 
 def server():
@@ -72,6 +70,22 @@ def parse_request(header):
     else:
         response = response_ok()
     return response
+
+
+path_file = os.path.abspath('/webroot')
+
+
+def resolve_uri(path_file):
+    """File path to our webroot directory."""
+    directory = os.listdir(path_file)
+    print('<ul>')
+    for item in directory:
+        print('<li>%s</li>') % item
+        fullpath = os.path.join(path_file, item)
+        if os.path.isdir(fullpath):
+            resolve_uri(fullpath)
+    print('</ul>')
+    print(resolve_uri(path_file))
 
 
 if __name__ == '__main__':
