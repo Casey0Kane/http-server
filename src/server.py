@@ -4,6 +4,12 @@ import sys
 import os
 
 
+MEDIA_TYPES = [
+    'image/jpeg',
+    'image/png',
+]
+
+
 def server():
     """Our server function for our sockets."""
     server = socket.socket(
@@ -39,9 +45,9 @@ def server():
     sys.exit()
 
 
-def response_ok():
+def response_ok(type):
     """Send a 200 response."""
-    return """HTTP/1.1 200 OK\r\nContent-Type: text/plain \r\n\r\n Successfully connected.\r\n\r\n"""
+    return "HTTP/1.1 200 OK Content-Type:" + type + '\r\n\r\n'
 
 
 def response_error(error):
@@ -60,6 +66,11 @@ def response_error(error):
     return err_msg
 
 
+def response_file_not_found(error):
+    """Create a 404 error if file is not found in directory.."""
+    return 'HTTP/1.1 404 File Not Found\r\n' + error + ' is not in directory.\r\n\r\n'
+
+
 def parse_request(header):
     """Parse request from user to see if valid."""
     split_header = header.split()
@@ -72,11 +83,9 @@ def parse_request(header):
     return response
 
 
-path_file = os.path.abspath('/webroot')
-
-
 def resolve_uri(path_file):
     """File path to our webroot directory."""
+    path_file = os.path.abspath('/webroot')
     directory = os.listdir(path_file)
     print('<ul>')
     for item in directory:
