@@ -7,8 +7,8 @@ import io
 
 
 MEDIA_TYPES = [
-    'images/jpg',
-    'images/png',
+    'image/jpg',
+    'image/png',
 ]
 
 
@@ -16,7 +16,7 @@ def server():
     """Our server function for our sockets."""
     server = socket.socket(
         socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
-    address = ('127.0.0.1', 5000)
+    address = ('127.0.0.1', 5001)
     server.bind(address)
     server.listen(1)
     while True:
@@ -37,9 +37,6 @@ def server():
                 response = resolve_uri(split_header[1])
             else:
                 response = response_error(split_header)
-            if len(response) % buffer_length == 0:
-                response += 'EOF'
-            print('Response:', response)
             conn.sendall(response.encode('utf8'))
         except KeyboardInterrupt:
             print("\nClosing HTTP server.")
@@ -48,16 +45,16 @@ def server():
             sys.exit()
             break
         except(SyntaxError, TypeError):
-            response_error()
+            response_error(split_header)
             print("How did you manage to mess up this badly?")
-    conn.close()
-    server.close()
-    sys.exit()
+            conn.close()
+            server.close()
+            sys.exit()
 
 
-def response_ok(type):
+def response_ok(type, size):
     """Send a 200 response."""
-    return "HTTP/1.1 200 OK Content-Type:" + type + '\r\n\r\n'
+    return "HTTP/1.1 200 OK\r\nContent-Type: " + type + '\r\nContent-Length: '+ size + '\r\n\r\n'
 
 
 def response_error(error):
@@ -96,21 +93,33 @@ def resolve_uri(uri):
     print("file is", search_directory(root + uri))
     retrieved_file = search_directory(root + uri)
     file_type = mimetypes.guess_type(uri)[0]
+    try:
+        size = str(os.path.getsize(retrieved_file))
+    except IOError:
+        size = 0
     print('File Type is: ', file_type)
     try:
         if os.path.exists(retrieved_file):
             if file_type in MEDIA_TYPES:
                 f = io.open(retrieved_file, 'rb')
-                response = response_ok(file_type) + str(f.read())
+                response = response_ok(file_type, size) + str(f.read())
                 f.close()
             elif file_type == 'text/plain':
-                response = response_ok(file_type)
+                response = response_ok(file_type, size)
                 f = io.open(retrieved_file)
                 response += f.read()
                 f.close()
             elif os.path.isdir(root + uri):
-                response = response_ok('directory') + \
+                response = response_ok('directory', size) + \
                     prepare_directory(root + uri)
+            elif file_type == 'text/html':
+                f = io.open(retrieved_file)
+                response = response_ok(file_type, size) + str(f.read())
+                f.close()
+            else:
+                f = io.open(retrieved_file)
+                response = response_ok(file_type, size) + str(f.read())
+                f.close()
         else:
             response = response_file_not_found(uri)
     except IOError():
