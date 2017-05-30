@@ -34,7 +34,7 @@ def test_server_error():
     """Test server error."""
     from server import response_error
     assert response_error(
-        "åΩå∆˚fail") == '''HTTP/1.1 500 Internal Server Error\r\nUnknown arguements passed into request.\r\n\r\n'''
+        "failure") == '''HTTP/1.1 500 Internal Server Error\r\nUnknown arguements passed into request.\r\n\r\n'''
 
 
 # @pytest.fixture
