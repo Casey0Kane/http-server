@@ -16,7 +16,7 @@ def server():
     """Our server function for our sockets."""
     server = socket.socket(
         socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
-    address = ('127.0.0.1', 5001)
+    address = ('127.0.0.1', 10000)
     server.bind(address)
     server.listen(1)
     while True:
@@ -54,7 +54,7 @@ def server():
 
 def response_ok(type, size):
     """Send a 200 response."""
-    return "HTTP/1.1 200 OK\r\nContent-Type: " + type + '\r\nContent-Length: '+ size + '\r\n\r\n'
+    return "HTTP/1.1 200 OK\r\nContent-Type: " + type + '\r\nContent-Length: ' + size + '\r\n\r\n'
 
 
 def response_error(error):
@@ -63,7 +63,7 @@ def response_error(error):
     if len(error) < 3:
         err_msg += 'HTTP Request requires 3 items, a Method, URI, and a Protocol.\r\n'
     elif len(error) > 3:
-        err_msg += 'Unknown arguements passed with request.\r\n'
+        err_msg += 'Unknown arguements passed into request.\r\n'
     else:
         if error[0] != 'GET':
             err_msg += 'This server only accepts GET requests\r\n'
