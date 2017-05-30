@@ -23,5 +23,4 @@ def client(message):
 if __name__ == '__main__':
     """Our name main."""
     import sys
-    message = sys.argv[1]
-    client(message)
+    client(sys.argv[1])

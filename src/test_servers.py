@@ -1,21 +1,21 @@
 """Testing our functions."""
-from client import client
 
 
-def test_message_less_than_buffer():
-    """Test message is smaller than the buffer."""
-    assert client("message") == "message"
+def test_response_ok():
+    """Test that response_ok returns confirmation if connection is valid."""
+    from server import response_ok
+    assert response_ok() == """
+    HTTP/1.1 200 OK\r\n
+    Content-Type: text/plain \r\n
+    \r\n
+    Successfully connected."""
 
 
-def test_message_larger_than_buffer():
-    """Test message is smaller than a buffer."""
-    assert client("Message is super long and won't be shorter than 8") == "Message is super long and won't be shorter than 8"
-
-
-def test_message_same_as_buffer():
-    """Test message is same as the buffer."""
-    assert client("MsgEIGHT") == "MsgEIGHT"
-
-
-"""msg cont non-ascii chars:.
-    assert msg sent = reply recieved"""
+def test_server_error():
+    """Test server error function returns connection is unsuccessful."""
+    from server import response_error
+    assert response_error() == """
+    HTTP/1.1 500 Internal Server Error\r\n
+    Content-Type: text/plain\r\n
+    \r\n
+    Could not Successfully connect."""
